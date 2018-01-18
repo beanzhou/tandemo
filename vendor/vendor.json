@@ -1,0 +1,11 @@
+{
+	"comment": "",
+	"ignore": "test",
+	"package": [
+		{
+			"path": "golang.org/x/crypto/ssh/terminal",
+			"revision": ""
+		}
+	],
+	"rootPath": "github.com/beanzhou/tandemo"
+}
