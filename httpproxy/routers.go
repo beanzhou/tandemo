@@ -1,6 +1,8 @@
 package httpproxy
 
 import (
+	"context"
+	"encoding/json"
 	"net/http"
 
 	"github.com/gorilla/mux"
@@ -46,6 +48,18 @@ var routes = Routes{
 	},
 }
 
+func writeJson(ctx context.Context, w http.ResponseWriter, statusCode int, v interface{}) {
+	requestId, _ := ctx.Value("requestId").(string)
+	header := w.Header()
+	header.Set("x-request-id", requestId)
+	header.Set("Content-Type", "application/json; charset=UTF-8")
+	w.WriteHeader(statusCode)
+	err := json.NewEncoder(w).Encode(v)
+	if err != nil {
+		log.Error(err)
+	}
+}
+
 func createHandler(route Route) http.HandlerFunc {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		defer func() {
@@ -55,7 +69,7 @@ func createHandler(route Route) http.HandlerFunc {
 			}
 		}()
 		route.HandlerFunc.ServeHTTP(w, r)
-		log.Info("Path:", route.Pattern)
+		log.Info("Name:", route.Name)
 	})
 }
 

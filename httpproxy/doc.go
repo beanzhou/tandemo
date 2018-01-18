@@ -11,7 +11,7 @@ import (
 
 	"github.com/ghodss/yaml"
 	"github.com/gorilla/mux"
-	"golang.org/x/net/context"
+
 )
 
 const DocPathPrefix string = "/doc/"
@@ -40,16 +40,4 @@ func ServeSwagger(w http.ResponseWriter, r *http.Request) {
 	m["host"] = r.Host
 
 	writeJson(r.Context(), w, http.StatusOK, m)
-}
-
-func writeJson(ctx context.Context, w http.ResponseWriter, statusCode int, v interface{}) {
-	requestId, _ := ctx.Value("requestId").(string)
-	header := w.Header()
-	header.Set("x-request-id", requestId)
-	header.Set("Content-Type", "application/json; charset=UTF-8")
-	w.WriteHeader(statusCode)
-	err := json.NewEncoder(w).Encode(v)
-	if err != nil {
-		log.Error(err)
-	}
 }
