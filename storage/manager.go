@@ -16,7 +16,7 @@ func (m *UserManger) Insert(user User) (err error) {
 }
 
 func (m *UserManger) Update(user User) (err error) {
-	err = db.Insert(&user)
+	err = db.Update(&user)
 	if err != nil {
 		log.Errorln(err)
 		return
@@ -34,7 +34,7 @@ func (m *UserManger) Delete(userid int64) (err error) {
 	return
 }
 
-func (m *UserManger) GetOne(userid int64) (user User, err error) {
+func (m *UserManger) Get(userid int64) (user User, err error) {
 	user = User{Id: userid}
 	err = db.Select(&user)
 	if err != nil {
@@ -45,7 +45,7 @@ func (m *UserManger) GetOne(userid int64) (user User, err error) {
 }
 
 // TODO: Pagination
-func (m *UserManger) GetList(userid int64) (users []User, err error) {
+func (m *UserManger) GetUsers() (users []User, err error) {
 	err = db.Model(&users).Order("id").Select()
 	if err != nil {
 		log.Errorln(err)
@@ -75,7 +75,7 @@ func (m *RelationshipManger) Insert(rs Relationship) (err error) {
 }
 
 func (m *RelationshipManger) Update(rs Relationship) (err error) {
-	err = db.Insert(&rs)
+	err = db.Update(&rs)
 	if err != nil {
 		log.Errorln(err)
 		return
@@ -95,7 +95,7 @@ func (m *RelationshipManger) Delete(rsId int64) (err error) {
 
 // TODO: Pagination
 func (m *RelationshipManger) GetRelationships(userid int64) (rs []Relationship, err error) {
-	err = db.Model(&rs).Where("userid = ?", userid).Select()
+	err = db.Model(&rs).Where("user_id = ?", userid).Order("id").Select()
 	if err != nil {
 		log.Errorln(err)
 		return
@@ -104,7 +104,7 @@ func (m *RelationshipManger) GetRelationships(userid int64) (rs []Relationship, 
 }
 
 func (m *RelationshipManger) Count(userid int64) (count int, err error) {
-	count, err = db.Model(&Relationship{}).Where("userid = ?", userid).Count()
+	count, err = db.Model(&Relationship{}).Where("user_id = ?", userid).Count()
 	if err != nil {
 		log.Errorln(err)
 		return

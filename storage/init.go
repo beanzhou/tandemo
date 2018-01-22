@@ -23,4 +23,9 @@ func init() {
 	if err != nil {
 		log.Errorln(err)
 	}
+
+	err = db.CreateTable(&Relationship{}, &orm.CreateTableOptions{IfNotExists: true})
+	if err != nil {
+		log.Errorln(err)
+	}
 }
