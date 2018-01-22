@@ -12,6 +12,7 @@ var (
 )
 
 func init() {
+	// TODO: db config file
 	db = pg.Connect(&pg.Options{
 		User:     "postgres",
 		Password: "root",
